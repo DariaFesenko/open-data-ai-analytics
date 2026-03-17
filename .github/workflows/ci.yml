@@ -43,7 +43,6 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Run module
-        if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.module == 'all' || github.event.inputs.module == matrix.module }}
         run: |
           mkdir -p artifacts/${{ matrix.module }}
           python src/${{ matrix.module }}.py > artifacts/${{ matrix.module }}/log.txt 2>&1
