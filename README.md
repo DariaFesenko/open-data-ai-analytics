@@ -85,7 +85,7 @@ Conflict test from feature/conflict_test
 |\
 | * c46daa6 (origin/feature/conflict_test, feature/conflict_test) Add conflicting line to README
 * | b5f39e9 Add another conflicting line to README 
-```text
+```
 
 ## Лабораторна 2
 
