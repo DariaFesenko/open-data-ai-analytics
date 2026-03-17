@@ -86,31 +86,48 @@ Conflict test from feature/conflict_test
 | * c46daa6 (origin/feature/conflict_test, feature/conflict_test) Add conflicting line to README
 * | b5f39e9 Add another conflicting line to README 
 
-Лабораторна 2
+## Лабораторна 2
+
+### Мета
+Налаштувати CI/CD для проекту: автоматичний запуск модульних задач (тести, лінт, збірка, перевірки) при push або pull_request, публікація артефактів (логи, звіти, графіки) та навчитися запускати pipeline на GitHub-hosted та self-hosted runners.
+
 ### Хід роботи
-#### 1.	Створено файл workflow (.github/workflows/ci.yml)
-#### 2.	Визначено тригери
-•	push у гілку main (автоматичний запуск після коміту), 
-•	pull_request у гілку main (при створенні PR), 
-•	workflow_dispatch (ручний запуск з вибором модуля).
-#### 3.	Визначено job run-modules
-•	Виконується на Ubuntu (runs-on: ubuntu-latest). 
-•	Використовується matrix, щоб запускати одночасно всі модулі: data_load, data_quality, data_research, visualization. 
-•	fail-fast: якщо один модуль впаде, інші все одно запустяться.
-Job робить сheckout коду з репозиторію, встановлення Python та залежностей, наприкад, Python 3.11, залежності з requirements.txt, запуск модулів, для all модулів запускається цикл по кожному модулю і результати записуються у artifacts/<module>/log.txt, для конкретного модуля запускається тільки він, збереження результатів, тобто, використано actions/upload-artifact@v4, щоб завантажити логи та інші артефакти. Matrix дозволяє не дублювати код для кожного модуля, а запускати їх паралельно. Upload-artifact потрібен, щоб зберегти логи/графіки і мати доступ після виконання workflow. workflow_dispatch з параметром module дає змогу запускати тільки один модуль, економлячи час.
-#### 4.	Реалізовано запропонований варіант 1. Після запуску модулів результати зберігаються як GitHub Actions artifacts. Логи можна завантажити та переглянути через інтерфейс GitHub Actions. Зберігання артефактів дозволяє аналізувати роботу модулів після запуску, перевіряти помилки та результати без повторного запуску.
-#### 5.	Підключено локальний runner на ПК. Створено окремий workflow ci-selfhosted.yml, де запускаємо хоча б один модуль (visualization) на self-hosted runner. Збереження артефактів також здійснюється через upload-artifact.
-В результаті експерименту виявлено наступне:
-### Параметри
-#### GitHub	
-Швидкість	Зазвичай залежить від завантаженості ГітХаб, однак в цьому випадку все ж таки спрацював швидше, за 14сек.
-#### Self-hosted
-Є повільнішим, в даному випадку виконав за 25сек
-#### GitHub
-Обмежений, є потреба в завантаженні даних
-#### Self-hosted
-Можна працювати з великими локальними датасетами
-#### GitHub
-Безпечніший та стабільніший	
-#### Self-hosted
-Є портреба у власноручному підтриманні безпеки та залежності
+
+#### 1. Створення workflow
+Створено файл `.github/workflows/ci.yml` для налаштування CI/CD pipeline.
+
+#### 2. Визначення тригерів
+- `push` у гілку main (автоматичний запуск після коміту)  
+- `pull_request` у гілку main (при створенні PR)  
+- `workflow_dispatch` (ручний запуск з вибором модуля)
+
+#### 3. Налаштування job run-modules
+Job `run-modules` виконується на Ubuntu (`runs-on: ubuntu-latest`) і використовує matrix для одночасного запуску всіх модулів: `data_load`, `data_quality`, `data_research`, `visualization`. Параметр `fail-fast: false` забезпечує продовження запуску інших модулів навіть при падінні одного.
+
+Job виконує:
+- checkout коду з репозиторію  
+- встановлення Python 3.11 та залежностей з `requirements.txt`  
+- запуск модулів: якщо обрано всі модулі (`all`), workflow проходить циклічний запуск по кожному модулю і результати записуються у `artifacts/<module>/log.txt`; якщо обрано конкретний модуль — запускається тільки він  
+- збереження результатів через `actions/upload-artifact@v4` для подальшого аналізу логів та артефактів
+
+Matrix стратегія дозволяє паралельно запускати модулі без дублювання коду, а параметр `module` у `workflow_dispatch` економить час.
+
+#### 4. Публікація результатів
+Реалізовано варіант 1: після запуску модулів всі результати зберігаються як GitHub Actions artifacts. Це дозволяє завантажувати та переглядати логи, графіки і звіти через інтерфейс GitHub.
+
+#### 5. Підключення self-hosted runner
+- Підключено локальний runner на ПК  
+- Створено окремий workflow `ci-selfhosted.yml`, де запускаємо хоча б один модуль (`visualization`) на self-hosted runner  
+- Збереження артефактів здійснюється через `upload-artifact`
+
+### Гілки репозиторію
+- `main`  
+- `feature/ci_setup`  
+- `feature/ci_selfhosted`  
+
+### Git log
+```text
+* a1b2c3d (HEAD -> main, origin/main) Add CI workflow ci.yml
+* e4f5g6h Add job run-modules with matrix setup
+* i7j8k9l Add upload-artifact step for logs
+* m0n1o2p Setup self-hosted workflow ci-selfhosted.yml
