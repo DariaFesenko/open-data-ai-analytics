@@ -1,3 +1,24 @@
+name: CI pipeline
+
+on:
+  push:
+    branches: ["main", "ci-setup"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+    inputs:
+      module:
+        description: "Which module to run (or 'all')"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - data_load
+          - data_quality_analysis
+          - data_research
+          - visualization
+
 jobs:
   run-modules:
     runs-on: ubuntu-latest
