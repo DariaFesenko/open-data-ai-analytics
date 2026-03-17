@@ -50,11 +50,21 @@ jobs:
           if [ "${{ github.event.inputs.module }}" = "all" ]; then
             for mod in data_load data_quality data_research visualization; do
               mkdir -p artifacts/$mod
+              echo "Start $mod: $(date +%s)" > artifacts/$mod/time.txt
+              START=$(date +%s)
               python src/$mod.py > artifacts/$mod/log.txt 2>&1 || true
+              END=$(date +%s)
+              echo "End $mod: $END" >> artifacts/$mod/time.txt
+              echo "Duration: $((END-START)) seconds" >> artifacts/$mod/time.txt
             done
           else
             mkdir -p artifacts/${{ github.event.inputs.module }}
+            echo "Start: $(date +%s)" > artifacts/${{ github.event.inputs.module }}/time.txt
+            START=$(date +%s)
             python src/${{ github.event.inputs.module }}.py > artifacts/${{ github.event.inputs.module }}/log.txt 2>&1 || true
+            END=$(date +%s)
+            echo "End: $END" >> artifacts/${{ github.event.inputs.module }}/time.txt
+            echo "Duration: $((END-START)) seconds" >> artifacts/${{ github.event.inputs.module }}/time.txt
           fi
 
       - name: Upload artifacts
