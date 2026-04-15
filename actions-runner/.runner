@@ -1,0 +1,11 @@
+﻿{
+  "agentId": 2,
+  "agentName": "ASPIRE",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus8.actions.githubusercontent.com/8iI4g3L75YvMe6gEVz0y2sZLHmkDf3AWdQwsxrnpH7XhH3iwxD/",
+  "gitHubUrl": "https://github.com/DariaFesenko/open-data-ai-analytics",
+  "workFolder": "_work",
+  "useV2Flow": true,
+  "serverUrlV2": "https://broker.actions.githubusercontent.com/"
+}

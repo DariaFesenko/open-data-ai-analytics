@@ -85,3 +85,146 @@ Conflict test from feature/conflict_test
 |\
 | * c46daa6 (origin/feature/conflict_test, feature/conflict_test) Add conflicting line to README
 * | b5f39e9 Add another conflicting line to README 
+
+
+# Dockerized Data Analysis Project
+
+## Опис проєкту
+
+Проєкт складається з кількох контейнеризованих сервісів:
+- `data_load` — зчитує CSV-файл, створює SQLite-базу та завантажує дані;
+- `data_quality_analysis` — виконує перевірку якості даних та формує звіт;
+- `data_research` — обчислює базові статистики та формує підсумковий звіт;
+- `visualization` — будує графіки та зберігає їх у `PNG`;
+- `web` — показує звіти та візуалізації у браузері.
+
+## Структура проєкту
+
+```text
+project/
+├── data/
+│   └── dataset.csv
+├── data_load/
+│   ├── app.py
+│   ├── requirements.txt
+│   └── Dockerfile
+├── data_quality_analysis/
+│   ├── app.py
+│   ├── requirements.txt
+│   └── Dockerfile
+├── data_research/
+│   ├── app.py
+│   ├── requirements.txt
+│   └── Dockerfile
+├── visualization/
+│   ├── app.py
+│   ├── requirements.txt
+│   └── Dockerfile
+├── web/
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   ├── templates/
+│   │   └── index.html
+│   └── static/
+│       └── style.css
+├── reports/
+├── plots/
+├── storage/
+├── compose.yaml
+└── README.md
+```
+
+## Використані технології
+
+- Python 3.12
+- Pandas
+- SQLite
+- Matplotlib
+- Seaborn
+- Flask
+- Docker
+- Docker Compose
+
+## Як запустити
+
+1. Переконайтесь, що встановлено Docker і Docker Compose.
+2. Перейдіть у корінь проєкту.
+3. Запустіть:
+
+```bash
+docker compose up --build
+```
+
+4. Відкрийте браузер і перейдіть за адресою:
+
+```text
+http://localhost:5000
+```
+
+## Опис сервісів
+
+### `data_load`
+- читає `data/dataset.csv`;
+- створює таблицю `contracts` у SQLite;
+- записує базу у volume `storage`.
+
+### `data_quality_analysis`
+- читає дані з бази;
+- рахує пропуски;
+- перевіряє дублікати;
+- перевіряє коректність дат і числових значень;
+- зберігає звіт у `reports/`.
+
+### `data_research`
+- обчислює описову статистику;
+- формує текстовий та JSON-звіт;
+- зберігає результат у `reports/`.
+
+### `visualization`
+- будує 2 графіки;
+- зберігає їх у `plots/`.
+
+### `web`
+- запускає Flask-інтерфейс;
+- відображає звіти;
+- показує графіки у браузері.
+
+## Порти
+
+- `web`: `5000:5000`
+
+## Взаємодія між сервісами
+
+- `data_load` створює SQLite-базу у спільному volume `storage`;
+- `data_quality_analysis`, `data_research` і `visualization` читають дані з цієї БД;
+- результати записуються у volumes `reports` і `plots`;
+- `web` читає ці результати та показує їх користувачу.
+
+## Приклад CSV
+
+Файл `data/dataset.csv` повинен містити колонки:
+
+```text
+legal_entity_id,legal_entity_edrpou,legal_entity_name,contract_number,contract_date,contract_start_date,contract_end_date,last_update_contract,package_id,package_contract_price,all_contract_price,contract_count_division_id,contract_divisions
+```
+
+## Корисні команди
+
+Зупинити сервіси:
+
+```bash
+docker compose down
+```
+
+Перебудувати образи:
+
+```bash
+docker compose up --build
+```
+
+Подивитись запущені контейнери:
+
+```bash
+docker ps
+```

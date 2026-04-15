@@ -56,6 +56,7 @@ jobs:
             python src/${{ github.event.inputs.module }}.py > artifacts/${{ github.event.inputs.module }}/log.txt 2>&1 || true
           fi
       - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.inputs.module }}-${{ matrix.module }}-results
