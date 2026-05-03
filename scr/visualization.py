@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('C:/Users/Acer/Downloads/pmg_contracts_info.csv')
-df.hist()
+pd.read_csv('/data/dataset.csv')
+pd.hist()
 plt.show()
