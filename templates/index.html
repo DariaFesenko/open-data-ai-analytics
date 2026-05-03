@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Project Dashboard</title>
+  >
+</head>
+<body>
+  <div class="container">
+    <h1>Data Project Dashboard</h1>
+    <p>Демонстрація результатів модулів data_load, data_quality_analysis, data_research та visualization.</p>
+
+    <section>
+      <h2>Перевірка якості</h2>
+      <pre>{{ quality_text }}</pre>
+    </section>
+
+    <section>
+      <h2>Дослідження даних</h2>
+      <pre>{{ research_text }}</pre>
+    </section>
+
+    <section>
+      <h2>Візуалізації</h2>
+      {% if plots %}
+        {% for plot in plots %}
+          <div class="plot">
+            <img src="/plots/{{ plot }}" alt="{{ plot }}">
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>Графіки ще не згенеровані.</p>
+      {% endif %}
+    </section>
+  </div>
+</body>
+</html>
