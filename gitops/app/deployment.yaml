@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-data-app
+  namespace: open-data-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: open-data-app
+  template:
+    metadata:
+      labels:
+        app: open-data-app
+    spec:
+      containers:
+      - name: open-data-app
+        image: YOUR_DOCKERHUB_USERNAME/open-data-ai-analytics:latest
+        ports:
+        - containerPort: 3000
